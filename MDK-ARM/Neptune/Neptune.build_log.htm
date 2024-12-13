@@ -1,0 +1,68 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: ¦ÌVision V5.29.0.0
+Copyright (C) 2019 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: Mengchen Liu, SimpleDesign, LIC=32B1Q-NPRL0-9UT4U-SXQGQ-3ETBX-PCHUM
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Plus  Version: 5.29.0.0
+Toolchain Path:  D:\keil_sw\core\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 6 (build 750)
+Assembler:       Armasm.exe V5.06 update 6 (build 750)
+Linker/Locator:  ArmLink.exe V5.06 update 6 (build 750)
+Library Manager: ArmAr.exe V5.06 update 6 (build 750)
+Hex Converter:   FromElf.exe V5.06 update 6 (build 750)
+CPU DLL:         SARMCM3.DLL V5.29.0.0
+Dialog DLL:      DCM.DLL V1.17.3.0
+Target DLL:      Segger\JL2CM3.dll V2.99.36.0
+Dialog DLL:      TCM.DLL V1.36.5.0
+ 
+<h2>Project:</h2>
+D:\projects\Neptune\MDK-ARM\Neptune.uvprojx
+Project File Date:  12/13/2024
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 6 (build 750)', folder: 'D:\keil_sw\core\ARM\ARMCC\Bin'
+Build target 'Neptune'
+compiling system.c...
+../Core/Inc/system.h(4): warning:  #1295-D: Deprecated declaration mahony_ahrs_updateIMU - give arg types
+  void mahony_ahrs_updateIMU();
+..\Core\Src\system.c(195): warning:  #177-D: variable "ang"  was declared but never referenced
+  						int ang = 0;
+..\Core\Src\system.c(268): warning:  #177-D: variable "twoKi"  was declared but never referenced
+  	float twoKi = 0.01f;
+..\Core\Src\system.c: 3 warnings, 0 errors
+linking...
+Program Size: Code=24984 RO-data=880 RW-data=188 ZI-data=2556  
+FromELF: creating hex file...
+"Neptune\Neptune.axf" - 0 Error(s), 3 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: ARM
+                http://www.keil.com/pack/ARM.CMSIS.5.7.0.pack
+                ARM.CMSIS.5.7.0
+                CMSIS (Cortex Microcontroller Software Interface Standard)
+   * Component: CORE Version: 5.4.0
+
+Package Vendor: Keil
+                http://www.keil.com/pack/Keil.STM32F4xx_DFP.2.13.0.pack
+                Keil.STM32F4xx_DFP.2.13.0
+                STMicroelectronics STM32F4 Series Device Support, Drivers and Examples
+
+<h2>Collection of Component include folders:</h2>
+  .\RTE\_Neptune
+  D:\keil_sw\ARM\CMSIS\5.7.0\CMSIS\Core\Include
+  D:\keil_sw\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include
+
+<h2>Collection of Component Files used:</h2>
+
+   * Component: ARM::CMSIS:CORE:5.4.0
+      Include file:  CMSIS\Core\Include\tz_context.h
+Build Time Elapsed:  00:00:03
+</pre>
+</body>
+</html>
