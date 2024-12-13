@@ -23,6 +23,13 @@ struct ctar
 		float tar;
 };
 
+struct chassis_info
+{
+		float vtx;
+		float vty;
+		float vtw;
+};
+
 extern struct atti atti2;
 extern struct ctar ctar1;
 extern int ifEnable;

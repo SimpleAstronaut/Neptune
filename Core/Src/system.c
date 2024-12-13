@@ -22,6 +22,8 @@ struct atti atti1;
 struct atti atti2;
 struct ctar ctar1;
 
+struct chassis_info chassis;
+
 PID_t pid1;
 PID_t pid2;
 PID_t pid3;
@@ -83,8 +85,7 @@ void system_init(UART_HandleTypeDef *huart, SPI_HandleTypeDef *hspi, CAN_HandleT
     HAL_CAN_Start(hcan);
     HAL_CAN_ActivateNotification(hcan, CAN_IT_RX_FIFO0_MSG_PENDING);
 
-		//定时器使能
-		HAL_TIM_Base_Start_IT(htim);
+		
 
 		//串口使能
 		HAL_UARTEx_ReceiveToIdle_DMA(huart, rxBuffer1, RX_BUFFER_SIZE);
@@ -95,9 +96,16 @@ void system_init(UART_HandleTypeDef *huart, SPI_HandleTypeDef *hspi, CAN_HandleT
 		PID_Init(&pid3, 60, 19, 100, 20000.0, 20000, 5000);
 		PID_Init(&pid4, 60, 19, 100, 20000.0, 20000, 5000);
 		PID_Init(&pos, 40, 0, 100, 20000.0, 1800, 1800);
+		//定时器使能
+		HAL_TIM_Base_Start_IT(htim);
 		//__HAL_UART_DISABLE_IT(&huart1, UART_IT_RXNE);
 		//imu_init();
 		mpu_device_init();
+		
+		chassis.vtx = 0;
+		chassis.vty = 0;
+		chassis.vtw = 0;
+		
 }
 
 
@@ -137,6 +145,27 @@ void system_loop(UART_HandleTypeDef *huart, SPI_HandleTypeDef *hspi, CAN_HandleT
 						vtx = (rc.ch2 - 1024) * 2;
 						vtw = (rc.ch0 - 1024) * 2;
 
+						int t = 0;				//方向系数
+						ifEnable = 0;
+						if((rc.ch0 - 1024) > 0)
+						{
+								t = 1;
+								ifEnable = 1;
+						}
+						if((rc.ch0 - 1024) < 0)
+						{
+								t = -1;
+								ifEnable = 1;
+						}
+						if((rc.ch0 - 1024) == 0)
+						{
+								t = 1;
+								tyaw = IMU.quaternion.yaw;
+								ifEnable = 0;
+						}
+						
+						vtw = 10 * ( 0 - 0.1 * POSPID_General_Cal(&pos, t * tyaw, IMU.quaternion.yaw));
+
 						dyaw = tyaw - IMU.quaternion.yaw;  
 
 						//vtx = vtx * cos(dyaw) - vty * sin(dyaw);
@@ -147,6 +176,7 @@ void system_loop(UART_HandleTypeDef *huart, SPI_HandleTypeDef *hspi, CAN_HandleT
 								//tyaw = IMU.quaternion.yaw;
 						}
 
+						/*
 						if(rc.ch0 != 1024)
 						{
 								tyaw = IMU.quaternion.yaw;
@@ -154,7 +184,7 @@ void system_loop(UART_HandleTypeDef *huart, SPI_HandleTypeDef *hspi, CAN_HandleT
 						else
 						{
 								vtw = 10 * ( 0 - 0.1 * POSPID_General_Cal(&pos, tyaw, IMU.quaternion.yaw));
-						}
+						}*/
 
 						int vtx1, vty1;
 
@@ -222,10 +252,10 @@ void system_loop(UART_HandleTypeDef *huart, SPI_HandleTypeDef *hspi, CAN_HandleT
 						v2 = -vtx1 + vty1 + vtw;
 						v3 = vtx1 + vty1 + vtw;
 						v4 = -vtx1 - vty1 + vtw;
-						set_current(hcan, 0x200, 0.1*(PID_General_Cal(&pid1, v1, mes1.speed)), 
-																			0.1*(PID_General_Cal(&pid2, v2, mes2.speed)), 
-																			0.1*(PID_General_Cal(&pid3, v3, mes3.speed)), 
-																			0.1*(PID_General_Cal(&pid4, v4, mes4.speed))
+						set_current(hcan, 0x200, 0.1 * (PID_General_Cal(&pid1, v1, mes1.speed)), 
+																			0.1 * (PID_General_Cal(&pid2, v2, mes2.speed)), 
+																			0.1 * (PID_General_Cal(&pid3, v3, mes3.speed)), 
+																			0.1 * (PID_General_Cal(&pid4, v4, mes4.speed))
 																																									);
 						ifMode3 = 1;
 						//tyaw = IMU.quaternion.yaw;

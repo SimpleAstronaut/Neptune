@@ -438,6 +438,16 @@
               <FilePath>..\Core\Src\AHRS.lib</FilePath>
             </File>
             <File>
+              <FileName>timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\timer.c</FilePath>
+            </File>
+            <File>
+              <FileName>connective.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\connective.c</FilePath>
+            </File>
+            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/main.c</FilePath>
@@ -451,16 +461,6 @@
               <FileName>stm32f4xx_hal_msp.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/stm32f4xx_hal_msp.c</FilePath>
-            </File>
-            <File>
-              <FileName>timer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\timer.c</FilePath>
-            </File>
-            <File>
-              <FileName>connective.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\connective.c</FilePath>
             </File>
           </Files>
         </Group>
