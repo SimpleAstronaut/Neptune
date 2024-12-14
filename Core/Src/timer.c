@@ -34,11 +34,22 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 						i++;
 						if(i == 10)
 						{
-								tyaw++;
-								if(tyaw > 180)
-								{
-										tyaw = -tyaw;
+								//10ms定时器
+								switch(chassis.spin_dir){
+										case 1  :
+													//顺时针
+													chassis.tyaw++;
+													break; 
+										case -1  :
+													chassis.tyaw--;
+													//逆时针
+													break; 
 								}
+								/*chassis.tyaw++;
+								if(chassis.tyaw > 180)
+								{
+										chassis.tyaw = -chassis.tyaw;
+								}*/
 								i = 0;
 						}
 				}
@@ -49,6 +60,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 				p++;
 				if(p >= 150)
 				{
+						//心跳停止保护
 						p = 0;
 						stopt = 1;
 						

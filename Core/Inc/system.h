@@ -28,11 +28,21 @@ struct chassis_info
 		float vtx;
 		float vty;
 		float vtw;
+		
+		int spin_dir;	 //旋转方向 1顺时针 -1逆时针
+		float tyaw;
+
+		int mode;
+		int check;					//断连保护标志位
+		int stop;						//心跳标志位
+
+		float rpm[5];				//轮转速 第一位表示是否开启
 };
 
 extern struct atti atti2;
 extern struct ctar ctar1;
+extern struct chassis_info chassis;
 extern int ifEnable;
 extern float ctar;
-extern int tyaw;
-extern int check;
+//extern int tyaw;
+//extern int check;
