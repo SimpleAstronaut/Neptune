@@ -95,7 +95,7 @@ void system_init(UART_HandleTypeDef *huart, SPI_HandleTypeDef *hspi, CAN_HandleT
 		PID_Init(&pid2, 60, 19, 100, 20000.0, 20000, 5000);
 		PID_Init(&pid3, 60, 19, 100, 20000.0, 20000, 5000);
 		PID_Init(&pid4, 60, 19, 100, 20000.0, 20000, 5000);
-		PID_Init(&pos, 40, 0, 100, 20000.0, 1800, 1800);
+		PID_Init(&pos, 60, 0, 100, 20000.0, 1800, 1800);
 		//定时器使能
 		HAL_TIM_Base_Start_IT(htim);
 		//__HAL_UART_DISABLE_IT(&huart1, UART_IT_RXNE);
@@ -176,7 +176,7 @@ void system_loop(UART_HandleTypeDef *huart, SPI_HandleTypeDef *hspi, CAN_HandleT
 								ifEnable = 0;
 						}
 						
-						chassis.vtw = 10 * ( 0 - 0.1 * POSPID_General_Cal(&pos, t * chassis.tyaw, IMU.quaternion.yaw));
+						chassis.vtw = 10 * ( 0 - 0.1 * POSPID_General_Cal(&pos, chassis.tyaw, IMU.quaternion.yaw));
 
 						dyaw = chassis.tyaw - IMU.quaternion.yaw;  
 
@@ -203,10 +203,17 @@ void system_loop(UART_HandleTypeDef *huart, SPI_HandleTypeDef *hspi, CAN_HandleT
 						vtx1 = chassis.vtx * cos(dyaw * 3.14/180) - chassis.vty * sin(dyaw * 3.14/180);
 						vty1 = chassis.vtx * sin(dyaw * 3.14/180) + chassis.vty * cos(dyaw * 3.14/180);
 
-						chassis.rpm[1] = vtx1 - vty1 + chassis.vtw;
-						chassis.rpm[2] = -vtx1 + vty1 + chassis.vtw;
-						chassis.rpm[3] = vtx1 + vty1 + chassis.vtw;
+						chassis.rpm[1] = vtx1 + vty1 + chassis.vtw;
+						chassis.rpm[2] = vtx1 - vty1 + chassis.vtw;
+						chassis.rpm[3] = -vtx1 + vty1 + chassis.vtw;
 						chassis.rpm[4] = -vtx1 - vty1 + chassis.vtw;
+						/*
+						v1 = vtx1 + vty1 + vtw;
+						v2 = +vtx1 - vty1 + vtw;
+						v3 = -vtx1 + vty1 + vtw;
+						v4 = -vtx1 - vty1 + vtw;
+						*/
+						
 						set_current(hcan, 0x200, 0.1 * (PID_General_Cal(&pid1, 2*chassis.rpm[1], mes1.speed)), 
 																			0.1 * (PID_General_Cal(&pid2, 2*chassis.rpm[2], mes2.speed)), 
 																			0.1 * (PID_General_Cal(&pid3, 2*chassis.rpm[3], mes3.speed)), 
@@ -229,14 +236,25 @@ void system_loop(UART_HandleTypeDef *huart, SPI_HandleTypeDef *hspi, CAN_HandleT
 						chassis.vty = (rc.ch3 - 1024) * 1;
 						chassis.vtx = (rc.ch2 - 1024) * 1;
 
-						if(rc.ch0 != 1024)
+						int t = 0;				//方向系数
+						ifEnable = 0;
+						if((rc.ch0 - 1024) > 0)
 						{
+								chassis.spin_dir = 1;
+								t = 1;
 								ifEnable = 1;
-								ifFirstChange = 1;
-								//tyaw = IMU.quaternion.yaw;
 						}
-						else
+						if((rc.ch0 - 1024) < 0)
 						{
+								chassis.spin_dir = -1;
+								t = -1;
+								ifEnable = 1;
+						}
+						if((rc.ch0 - 1024) == 0)
+						{
+								chassis.spin_dir = 0;
+								t = 1;
+								//tyaw = IMU.quaternion.yaw;
 								ifEnable = 0;
 						}
 						
@@ -260,9 +278,9 @@ void system_loop(UART_HandleTypeDef *huart, SPI_HandleTypeDef *hspi, CAN_HandleT
 
 						chassis.vtw = 2000;
 						//vtw = 0;
-						chassis.rpm[1] = vtx1 - vty1 + chassis.vtw;
-						chassis.rpm[2] = -vtx1 + vty1 + chassis.vtw;
-						chassis.rpm[3] = vtx1 + vty1 + chassis.vtw;
+						chassis.rpm[1] = vtx1 + vty1 + chassis.vtw;
+						chassis.rpm[2] = vtx1 - vty1 + chassis.vtw;
+						chassis.rpm[3] = -vtx1 + vty1 + chassis.vtw;
 						chassis.rpm[4] = -vtx1 - vty1 + chassis.vtw;
 						set_current(hcan, 0x200, 0.1 * (PID_General_Cal(&pid1, chassis.rpm[1], mes1.speed)), 
 																			0.1 * (PID_General_Cal(&pid2, chassis.rpm[2], mes2.speed)), 

@@ -36,7 +36,7 @@ struct chassis_info
 		int check;					//断连保护标志位
 		int stop;						//心跳标志位
 
-		float rpm[5];				//轮转速 第一位表示是否开启
+		float rpm[5];				//轮转速 rpm[0]表示是否开启
 };
 
 extern struct atti atti2;

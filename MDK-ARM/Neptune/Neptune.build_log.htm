@@ -27,22 +27,22 @@ Project File Date:  12/13/2024
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'D:\keil_sw\core\ARM\ARMCC\Bin'
 Build target 'Neptune'
-compiling timer.c...
-../Core/Inc/system.h(4): warning:  #1295-D: Deprecated declaration mahony_ahrs_updateIMU - give arg types
-  void mahony_ahrs_updateIMU();
-..\Core\Src\timer.c: 1 warning, 0 errors
 compiling system.c...
 ../Core/Inc/system.h(4): warning:  #1295-D: Deprecated declaration mahony_ahrs_updateIMU - give arg types
   void mahony_ahrs_updateIMU();
-..\Core\Src\system.c(224): warning:  #177-D: variable "ang"  was declared but never referenced
+..\Core\Src\system.c(157): warning:  #550-D: variable "t"  was set but never used
+  						int t = 0;				//方向系数
+..\Core\Src\system.c(231): warning:  #177-D: variable "ang"  was declared but never referenced
   						int ang = 0;
-..\Core\Src\system.c(297): warning:  #177-D: variable "twoKi"  was declared but never referenced
+..\Core\Src\system.c(239): warning:  #550-D: variable "t"  was set but never used
+  						int t = 0;				//方向系数
+..\Core\Src\system.c(315): warning:  #177-D: variable "twoKi"  was declared but never referenced
   	float twoKi = 0.01f;
-..\Core\Src\system.c: 3 warnings, 0 errors
+..\Core\Src\system.c: 5 warnings, 0 errors
 linking...
-Program Size: Code=25180 RO-data=884 RW-data=148 ZI-data=2604  
+Program Size: Code=25176 RO-data=880 RW-data=144 ZI-data=2608  
 FromELF: creating hex file...
-"Neptune\Neptune.axf" - 0 Error(s), 4 Warning(s).
+"Neptune\Neptune.axf" - 0 Error(s), 5 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -66,7 +66,7 @@ Package Vendor: Keil
 
    * Component: ARM::CMSIS:CORE:5.4.0
       Include file:  CMSIS\Core\Include\tz_context.h
-Build Time Elapsed:  00:00:04
+Build Time Elapsed:  00:00:02
 </pre>
 </body>
 </html>

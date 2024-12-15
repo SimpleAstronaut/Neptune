@@ -38,10 +38,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 								switch(chassis.spin_dir){
 										case 1  :
 													//À≥ ±’Î
-													chassis.tyaw++;
+													chassis.tyaw--;
 													break; 
 										case -1  :
-													chassis.tyaw--;
+													chassis.tyaw++;
 													//ƒÊ ±’Î
 													break; 
 								}
